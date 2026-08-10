@@ -1,0 +1,26 @@
+name: Validate Terraform
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate-module: # Required status checks in GitHub
+    uses: nsbno/platform-actions/.github/workflows/lint.terraform.yml@v2
+    with:
+      working-directory: .
+      terraform-version: "1.15.8"
+
+  validate-examples:
+    strategy:
+      matrix:
+        working_directory:
+          - examples/attached-to-api-gateway-v1
+          - examples/attached-to-cloudfront
+          - examples/with-web-acl-rules
+    uses: nsbno/platform-actions/.github/workflows/lint.terraform.yml@v2
+    with:
+      working-directory: ${{ matrix.working_directory }}
+      terraform-version: "1.15.8"
+      run-fmt: false # terraform fmt from validate-module already covers the examples too
