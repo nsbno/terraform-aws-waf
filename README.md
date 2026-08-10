@@ -26,7 +26,7 @@ module "waf" {
   logs = {
     enabled                       = true
     delete_protection_enabled     = var.environment == "prod"
-    // Set to `true` to reduce the cost og logs in WAF.
+    // Set to `true` to reduce the cost of logs in WAF.
     // Recommended to do, after you've gotten acquainted with 
     // the "normal" traffic towards your app and what you'd expect to block
     exclude_allow_action_requests = false
