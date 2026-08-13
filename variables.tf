@@ -16,7 +16,7 @@ variable "scope" {
   }
 
   validation {
-    condition     = var.scope != "CLOUDFRONT" || var.region != "us-east-1"
+    condition     = var.scope != "CLOUDFRONT" || var.region == "us-east-1"
     error_message = "When scope is CLOUDFRONT, the region must be us-east-1"
   }
 }
