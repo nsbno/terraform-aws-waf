@@ -16,8 +16,9 @@ variable "scope" {
   }
 
   validation {
-    condition     = var.scope != "CLOUDFRONT" || var.region == "us-east-1"
-    error_message = "When scope is CLOUDFRONT, the region must be us-east-1"
+    // Region is set to us-east-1 for CLOUDFRONT scope unless overridden with something else.
+    condition     = var.scope != "CLOUDFRONT" || var.region == null || var.region == "us-east-1"
+    error_message = "When scope is CLOUDFRONT, the region must be us-east-1 (or left unset)"
   }
 }
 
@@ -62,4 +63,23 @@ variable "token_immunity_time" {
 variable "token_domains" {
   type    = set(string)
   default = []
+}
+
+variable "custom_responses" {
+  description = "Custom response bodies, named by the key rules reference via `custom_response_body_key`."
+  type = map(object({
+    content      = string
+    content_type = string
+  }))
+  default = {}
+}
+
+variable "data_protection" {
+  description = "Headers/cookies to hash in WAF logs before storage, so sensitive values aren't stored in plaintext."
+  type = object({
+    mask_headers = optional(list(string), ["Authorization"])
+    // List the sensitive cookies your application actually sets, e.g. session/auth cookies.
+    mask_cookies = optional(list(string), [])
+  })
+  default = {}
 }
