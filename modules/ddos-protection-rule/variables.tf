@@ -41,7 +41,7 @@ variable "block_action" {
 variable "challenge_action" {
   type = object({
     enabled     = optional(bool, true)
-    sensitivity = string
+    sensitivity = optional(string, "HIGH")
 
     challenge_all_during_event = optional(bool, true)
 
